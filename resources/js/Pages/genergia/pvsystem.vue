@@ -32,7 +32,9 @@ export default {
     CardHeader,
   },
   data() {
-    return {};
+    return {
+      degradationYearError: false,
+    };
   },
   methods: {
     ...geenergiaMethods,
@@ -50,7 +52,12 @@ export default {
       this.changeshadingModelSelected(event);
     },
     updateDegradationYear(event) {
-      this.changedegradationYear(event);
+       const value = parseFloat(event);
+      this.degradationYearError = isNaN(value) || value < 1;
+      if (!this.degradationYearError) {
+        this.changedegradationYear(value);
+      }
+
     },
 
 
@@ -337,7 +344,11 @@ export default {
                             id="degradationyear"
                             v-model="degradationYear"
                             @input="updateDegradationYear"
+                            :class="{ 'is-invalid': degradationYearError }"
                           />
+                            <BFormInvalidFeedback v-if="degradationYearError">
+                            The value must be 1 or greater.
+                          </BFormInvalidFeedback>
                         </BCol>
                         <BCol lg="3">
                           <p>

@@ -33,19 +33,34 @@ export default {
   },
   data() {
     return {
-    
+            maxCapacityError: false,
+            initialSocError: false,
+
     };
   },
   methods: {
     
     ...geenergiaMethods,
 
-    updateMaxCapacity(event) {
-      this.changemaxCapacity(event);
+     updateMaxCapacity(event) {
+      const value = parseFloat(event);
+      this.maxCapacityError = isNaN(value) || value < 1;
+      console.log(value)
+      if (!this.maxCapacityError) {
+        this.changemaxCapacity(value);
+      }
     },
+
     updateInitialSoc(event) {
-      this.changeinitialSoc(event);
+      const value = parseFloat(event);
+      this.initialSocError = isNaN(value) || value < 1;
+      if (!this.initialSocError) {
+        this.changeinitialSoc(value);
+      }
     },
+
+   
+    
 
     updateDispatchStrategySelected(event) {
       this.changedispatchStrategySelected(event);
@@ -204,11 +219,15 @@ export default {
                         <BCol lg="1">
                           <BFormInput
                           v-model="maxCapacity"
-                          @input="changemaxCapacity"
+                          @input="updateMaxCapacity"
                             type="text"
                             class="form-control"
                             id="maxcapacity"
+                            :class="{ 'is-invalid': maxCapacityError }"
                           />
+                             <BFormInvalidFeedback v-if="maxCapacityError">
+                            The value must be 1 or greater.
+                          </BFormInvalidFeedback>
                         </BCol>
                       
                       </BRow>
@@ -221,13 +240,17 @@ export default {
                         <BCol lg="1">
                           <BFormInput
                           v-model="initialSoc"
-                          @input="changeinitialSoc"
+                          @input="updateInitialSoc"
                             type="text"
                             class="form-control"
                             id="timestep"
+                             :class="{ 'is-invalid': initialSocError }"
                            
                             
                           />
+                             <BFormInvalidFeedback v-if="initialSocError">
+                            The value must be 1 or greater.
+                          </BFormInvalidFeedback>
                         </BCol>
                       </BRow>
                     </BForm>

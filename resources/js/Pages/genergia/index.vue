@@ -48,7 +48,6 @@ export default {
     updateSimulationLength(event) {
       const value = parseFloat(event);
       this.simulationLengthError = isNaN(value) || value < 1;
-      console.log(this.simulationLengthError)
       if (!this.simulationLengthError) {
         this.changeSimulationLength(value);
       }
